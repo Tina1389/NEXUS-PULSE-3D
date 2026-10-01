@@ -1,0 +1,514 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Pulse Sphere</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+    background:
+        radial-gradient(
+            ellipse at 50% 100%,
+            #172536 0%,
+            #0b111b 38%,
+            #030408 100%
+        );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: Arial, sans-serif;
+    perspective: 1000px;
+}
+
+/* ---------- MAIN ---------- */
+
+.scene {
+    width: 100vw;
+    height: 100vh;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+/* ---------- CAMERA ---------- */
+
+.camera {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform 0.18s cubic-bezier(.2,.8,.2,1);
+}
+
+/* ---------- SPHERE ---------- */
+
+.sphere {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 350px;
+    height: 350px;
+
+    transform:
+        translate(-50%, -50%);
+
+    transform-style: preserve-3d;
+}
+
+/* ---------- LAYERS ---------- */
+
+.layer {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255,255,255,.16);
+
+    border-radius: 12px;
+
+    background: rgba(0,150,255,.008);
+
+    transform-style: preserve-3d;
+
+    box-shadow:
+        0 0 15px rgba(0,180,255,.015);
+
+    transition:
+        width .5s ease,
+        height .5s ease,
+        border-radius .5s ease;
+}
+
+/* 20 depth positions */
+
+.layer:nth-child(1)  { transform: translateZ(-166px); }
+.layer:nth-child(2)  { transform: translateZ(-149px); }
+.layer:nth-child(3)  { transform: translateZ(-132px); }
+.layer:nth-child(4)  { transform: translateZ(-115px); }
+.layer:nth-child(5)  { transform: translateZ(-98px); }
+.layer:nth-child(6)  { transform: translateZ(-81px); }
+.layer:nth-child(7)  { transform: translateZ(-64px); }
+.layer:nth-child(8)  { transform: translateZ(-47px); }
+.layer:nth-child(9)  { transform: translateZ(-30px); }
+.layer:nth-child(10) { transform: translateZ(-13px); }
+.layer:nth-child(11) { transform: translateZ(4px); }
+.layer:nth-child(12) { transform: translateZ(21px); }
+.layer:nth-child(13) { transform: translateZ(38px); }
+.layer:nth-child(14) { transform: translateZ(55px); }
+.layer:nth-child(15) { transform: translateZ(72px); }
+.layer:nth-child(16) { transform: translateZ(89px); }
+.layer:nth-child(17) { transform: translateZ(106px); }
+.layer:nth-child(18) { transform: translateZ(123px); }
+.layer:nth-child(19) { transform: translateZ(140px); }
+.layer:nth-child(20) { transform: translateZ(157px); }
+
+/* ---------- INNER RINGS ---------- */
+
+.ring {
+    width: 70%;
+    height: 70%;
+
+    border: 3px solid #fff;
+
+    border-radius: 50%;
+
+    background: rgba(0,0,0,.04);
+
+    transform-style: preserve-3d;
+
+    animation:
+        appear 3s cubic-bezier(.215,.610,.355,1)
+        infinite alternate,
+
+        colors 5s linear
+        infinite alternate;
+
+    box-shadow:
+        0 0 8px currentColor,
+        inset 0 0 8px rgba(255,255,255,.05);
+
+    transition:
+        width .5s ease,
+        height .5s ease,
+        border-radius .5s ease;
+}
+
+/* stagger */
+
+.layer:nth-child(1) .ring  { animation-delay: -.21s; }
+.layer:nth-child(2) .ring  { animation-delay: -.42s; }
+.layer:nth-child(3) .ring  { animation-delay: -.63s; }
+.layer:nth-child(4) .ring  { animation-delay: -.84s; }
+.layer:nth-child(5) .ring  { animation-delay: -1.05s; }
+.layer:nth-child(6) .ring  { animation-delay: -1.26s; }
+.layer:nth-child(7) .ring  { animation-delay: -1.47s; }
+.layer:nth-child(8) .ring  { animation-delay: -1.68s; }
+.layer:nth-child(9) .ring  { animation-delay: -1.89s; }
+.layer:nth-child(10) .ring { animation-delay: -2.10s; }
+.layer:nth-child(11) .ring { animation-delay: -2.31s; }
+.layer:nth-child(12) .ring { animation-delay: -2.52s; }
+.layer:nth-child(13) .ring { animation-delay: -2.73s; }
+.layer:nth-child(14) .ring { animation-delay: -2.94s; }
+.layer:nth-child(15) .ring { animation-delay: -3.15s; }
+.layer:nth-child(16) .ring { animation-delay: -3.36s; }
+.layer:nth-child(17) .ring { animation-delay: -3.57s; }
+.layer:nth-child(18) .ring { animation-delay: -3.78s; }
+.layer:nth-child(19) .ring { animation-delay: -3.99s; }
+.layer:nth-child(20) .ring { animation-delay: -4.20s; }
+
+/* ---------- ANIMATION ---------- */
+
+@keyframes appear {
+
+    0% {
+        transform:
+            scale(0)
+            rotateZ(45deg);
+    }
+
+    50% {
+        transform:
+            scale(0)
+            rotateZ(45deg);
+    }
+
+    100% {
+        transform:
+            scale(1)
+            rotateZ(45deg);
+    }
+}
+
+@keyframes colors {
+
+    0% {
+        border-color: #ff5555;
+        color: #ff5555;
+    }
+
+    50% {
+        border-color: #5555ff;
+        color: #5555ff;
+    }
+
+    100% {
+        border-color: #55ff88;
+        color: #55ff88;
+    }
+}
+
+/* ---------- GLOW ---------- */
+
+.glow {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 450px;
+    height: 450px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,160,255,.09),
+            rgba(100,0,255,.035),
+            transparent 70%
+        );
+
+    filter: blur(25px);
+
+    pointer-events: none;
+}
+
+/* ---------- CENTER ---------- */
+
+.center {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 7px;
+    height: 7px;
+
+    transform:
+        translate(-50%, -50%)
+        translateZ(175px);
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 0 8px #fff,
+        0 0 25px #00ccff,
+        0 0 50px #0066ff;
+
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,100% {
+        transform:
+            translate(-50%, -50%)
+            translateZ(175px)
+            scale(.7);
+    }
+
+    50% {
+        transform:
+            translate(-50%, -50%)
+            translateZ(175px)
+            scale(1.4);
+    }
+}
+
+/* ---------- TITLE ---------- */
+
+.title {
+    position: fixed;
+
+    bottom: 25px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    color: rgba(255,255,255,.45);
+
+    font-size: 11px;
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+
+    pointer-events: none;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 600px) {
+
+    .sphere {
+        width: 270px;
+        height: 270px;
+    }
+
+    .glow {
+        width: 350px;
+        height: 350px;
+    }
+
+    .layer:nth-child(1)  { transform: translateZ(-128px); }
+    .layer:nth-child(2)  { transform: translateZ(-115px); }
+    .layer:nth-child(3)  { transform: translateZ(-102px); }
+    .layer:nth-child(4)  { transform: translateZ(-89px); }
+    .layer:nth-child(5)  { transform: translateZ(-76px); }
+    .layer:nth-child(6)  { transform: translateZ(-63px); }
+    .layer:nth-child(7)  { transform: translateZ(-50px); }
+    .layer:nth-child(8)  { transform: translateZ(-37px); }
+    .layer:nth-child(9)  { transform: translateZ(-24px); }
+    .layer:nth-child(10) { transform: translateZ(-11px); }
+    .layer:nth-child(11) { transform: translateZ(2px); }
+    .layer:nth-child(12) { transform: translateZ(15px); }
+    .layer:nth-child(13) { transform: translateZ(28px); }
+    .layer:nth-child(14) { transform: translateZ(41px); }
+    .layer:nth-child(15) { transform: translateZ(54px); }
+    .layer:nth-child(16) { transform: translateZ(67px); }
+    .layer:nth-child(17) { transform: translateZ(80px); }
+    .layer:nth-child(18) { transform: translateZ(93px); }
+    .layer:nth-child(19) { transform: translateZ(106px); }
+    .layer:nth-child(20) { transform: translateZ(119px); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+
+    <div class="glow"></div>
+
+    <div class="camera" id="camera">
+
+        <div class="sphere">
+
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+            <div class="layer"><div class="ring"></div></div>
+
+            <div class="center"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="title">3D PULSE SPHERE</div>
+
+<script>
+
+/* ============================
+   MOUSE 3D CONTROL
+============================ */
+
+const camera = document.getElementById("camera");
+
+let targetX = -30;
+let targetY = 0;
+
+let currentX = -30;
+let currentY = 0;
+
+document.addEventListener("mousemove", function(e) {
+
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+
+    targetY = (x - 0.5) * 70;
+    targetX = (y - 0.5) * -55;
+
+});
+
+/* smooth movement */
+
+function animateCamera() {
+
+    currentX += (targetX - currentX) * 0.08;
+    currentY += (targetY - currentY) * 0.08;
+
+    camera.style.transform =
+        `rotateX(${currentX}deg)
+         rotateY(${currentY}deg)`;
+
+    requestAnimationFrame(animateCamera);
+}
+
+animateCamera();
+
+/* ============================
+   CLICK / PRESS EFFECT
+============================ */
+
+let pressed = false;
+
+document.addEventListener("mousedown", function() {
+
+    pressed = true;
+
+    document.querySelectorAll(".ring").forEach(function(ring) {
+
+        ring.style.width = "40%";
+        ring.style.height = "40%";
+        ring.style.borderRadius = "6px";
+
+    });
+
+});
+
+document.addEventListener("mouseup", function() {
+
+    pressed = false;
+
+    document.querySelectorAll(".ring").forEach(function(ring) {
+
+        ring.style.width = "70%";
+        ring.style.height = "70%";
+        ring.style.borderRadius = "50%";
+
+    });
+
+});
+
+/* touch */
+
+document.addEventListener("touchstart", function() {
+
+    document.querySelectorAll(".ring").forEach(function(ring) {
+
+        ring.style.width = "40%";
+        ring.style.height = "40%";
+        ring.style.borderRadius = "6px";
+
+    });
+
+});
+
+document.addEventListener("touchend", function() {
+
+    document.querySelectorAll(".ring").forEach(function(ring) {
+
+        ring.style.width = "70%";
+        ring.style.height = "70%";
+        ring.style.borderRadius = "50%";
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
+```
